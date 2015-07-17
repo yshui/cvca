@@ -94,7 +94,7 @@ GOL.prototype.set = function(state) {
     var rgba = new Uint8Array(this.statesize[0] * this.statesize[1] * 4);
     for (var i = 0; i < state.length; i++) {
         var ii = i * 4;
-        rgba[ii + 0] = rgba[ii + 1] = rgba[ii + 2] = state[i] ? 255 : 0;
+        rgba[ii + 0] = rgba[ii + 1] = rgba[ii + 2] = state[i]*255;
         rgba[ii + 3] = 255;
     }
     gl.bindTexture(gl.TEXTURE_2D, this.textures.front);
@@ -171,7 +171,7 @@ GOL.prototype.get = function() {
     gl.readPixels(0, 0, w, h, gl.RGBA, gl.UNSIGNED_BYTE, rgba);
     var state = new Uint8Array(w * h);
     for (var i = 0; i < w * h; i++) {
-        state[i] = rgba[i * 4] > 128 ? 1 : 0;
+        state[i] = rgba[i * 4]/255;
     }
     return state;
 };
@@ -219,10 +219,11 @@ GOL.prototype.toggle = function() {
  */
 GOL.prototype.setRandom = function(p) {
 	var gl = this.gl, size = this.statesize[0] * this.statesize[1];
-	p = p == null ? 0.5 : p;
-	var rand = new Uint8Array(size);
+	var rand = new Float32Array(size);
+	if (p == null)
+		p = 0.5;
 	for (var i = 0; i < size; i++) {
-		rand[i] = Math.random() < p ? 1 : 0;
+		rand[i] = Math.random() > p ? 1.0 : 0.0;
 	}
 	this.set(rand);
 	return this;
