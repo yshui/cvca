@@ -15,7 +15,8 @@ uniform sampler2D state; \
 uniform vec2 scale; \
 \
 void main() { \
-    gl_FragColor = texture2D(state, gl_FragCoord.xy / scale); \
+    vec4 tmp = texture2D(state, gl_FragCoord.xy / scale); \
+    gl_FragColor = vec4(1.0-tmp.x, 1.0-tmp.y, 1.0-tmp.z, 0); \
 }";
 /**
  * Game of Life simulation and display.
