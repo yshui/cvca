@@ -23,7 +23,17 @@ canvas {
     border: 1px solid #333;
 }
 
-div.description {
+.options {
+    color: white;
+    width: 180px;
+    margin: 0px auto;
+    text-indent: 1em;
+    text-align: justify;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.description {
     color: salmon;
     width: 600px;
     margin: 0px auto;

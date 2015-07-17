@@ -13,10 +13,14 @@ precision mediump float; \
 \
 uniform sampler2D state; \
 uniform vec2 scale; \
+uniform bool invert; \
 \
 void main() { \
     vec4 tmp = texture2D(state, gl_FragCoord.xy / scale); \
+    if (invert) \
     gl_FragColor = vec4(1.0-tmp.x, 1.0-tmp.y, 1.0-tmp.z, 0); \
+    else \
+    gl_FragColor = vec4(tmp.x, tmp.y, tmp.z, 0); \
 }";
 /**
  * Game of Life simulation and display.
@@ -152,10 +156,12 @@ GOL.prototype.draw = function() {
     gl.bindFramebuffer(gl.FRAMEBUFFER, null);
     gl.bindTexture(gl.TEXTURE_2D, this.textures.front);
     gl.viewport(0, 0, this.viewsize[0], this.viewsize[1]);
+    var inv = $('#invert').prop("checked");
     this.programs.copy.use()
         .attrib('quad', this.buffers.quad, 2)
         .uniform('state', 0, true)
         .uniform('scale', this.viewsize)
+        .uniform('invert', inv)
         .draw(gl.TRIANGLE_STRIP, 4);
     return this;
 };
