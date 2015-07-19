@@ -47,7 +47,8 @@ function GOL(canvas, scale, p) {
         copy: new Igloo.Program(gl, vshader, fshader),
         gol: [
              new Igloo.Program(gl, vshader, gen_shader(0)),
-             new Igloo.Program(gl, vshader, gen_shader(1))
+             new Igloo.Program(gl, vshader, gen_shader(1)),
+             new Igloo.Program(gl, vshader, gen_shader(2))
         ]
     };
     this.buffers = {

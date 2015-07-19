@@ -53,27 +53,32 @@ for(var k in sortnet) {
 	shader += "v"+b+"=max(tmp, v"+b+");\n";
 }
 
-var coff = new Array(24);
-if (conf == 0) {
-coff[2] = -0.205;
-coff[12] = 1.275;
-coff[23] = -0.09;
-}else {
-coff[9] = 0.25;
-coff[8] = 1.3;
-coff[7] = 1.1;
-coff[22] = 0.16;
-coff[20] = -0.05;
-coff[4] = -0.9;
-coff[5]=-0.9;
+if (conf == 2) {
+	shader += "float res = -v12*v9*0.35+v20*1.2-v2*0.1;";
+} else {
+	var coff = new Array(24);
+	if (conf == 0) {
+		coff[2] = -0.205;
+		coff[12] = 1.275;
+		coff[23] = -0.09;
+	}else {
+		coff[9] = 0.25;
+		coff[8] = 1.3;
+		coff[7] = 1.1;
+		coff[22] = 0.16;
+		coff[20] = -0.05;
+		coff[4] = -0.9;
+		coff[5]=-0.9;
+	}
+
+	shader += "float res = 0.0";
+	for(var k = 0; k < 24; k++) {
+		if (coff[k] != 0 && coff[k] != undefined)
+			shader += "+("+coff[k]+"*v"+k+")";
+	}
+	shader += ";\n";
 }
 
-shader += "float res = 0.0";
-for(var k = 0; k < 24; k++) {
-	if (coff[k] != 0 && coff[k] != undefined)
-		shader += "+("+coff[k]+"*v"+k+")";
-}
-shader += ";\n";
 shader += "gl_FragColor = vec4(res, res, res, 0);\n}"
 
 return shader;
