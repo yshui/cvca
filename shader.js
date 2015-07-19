@@ -53,15 +53,15 @@ for(var k in sortnet) {
 	shader += "v"+b+"=max(tmp, v"+b+");\n";
 }
 
-if (conf == 2) {
-	shader += "float res = -v12*v9*0.35+v20*1.2-v2*0.1;";
+if (conf == 3) {
+	shader += "float res = -sqrt(v23)*0.038+v20*0.045+v10*0.84+v7*0.9-v6*0.8;";
 } else {
 	var coff = new Array(24);
 	if (conf == 0) {
 		coff[2] = -0.205;
 		coff[12] = 1.275;
 		coff[23] = -0.09;
-	}else {
+	}else if (conf == 1){
 		coff[9] = 0.25;
 		coff[8] = 1.3;
 		coff[7] = 1.1;
@@ -69,12 +69,16 @@ if (conf == 2) {
 		coff[20] = -0.05;
 		coff[4] = -0.9;
 		coff[5]=-0.9;
+	} else {
+		coff[0]=coff[1]=coff[2]=coff[3]=-0.4;
+		coff[11]=-0.3;
+		coff[12]=2;
 	}
 
 	shader += "float res = 0.0";
 	for(var k = 0; k < 24; k++) {
 		if (coff[k] != 0 && coff[k] != undefined)
-			shader += "+("+coff[k]+"*v"+k+")";
+			shader += "+("+coff[k].toFixed(5)+"*v"+k+")";
 	}
 	shader += ";\n";
 }
