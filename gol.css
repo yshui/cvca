@@ -46,10 +46,10 @@ canvas {
 }
 
 #fps_con {
-    width : 100px;
     margin: auto;
     color: #4f4f4f;
     font-size: 20px;
+    display : table;
 }
 .fps {
     display: inline-block;
@@ -61,6 +61,11 @@ canvas {
    top : -5px;
    text-align : right;
    font-weight : bold;
+}
+#conf_opt {
+   margin : auto;
+   color : #7f7f7f;
+   display : table;
 }
 
 ul li span {

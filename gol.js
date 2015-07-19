@@ -45,7 +45,10 @@ function GOL(canvas, scale, p) {
     gl.disable(gl.DEPTH_TEST);
     this.programs = {
         copy: new Igloo.Program(gl, vshader, fshader),
-        gol: new Igloo.Program(gl, vshader, gen_shader())
+        gol: [
+             new Igloo.Program(gl, vshader, gen_shader(0)),
+             new Igloo.Program(gl, vshader, gen_shader(1))
+        ]
     };
     this.buffers = {
         quad: new Igloo.Buffer(gl)
@@ -138,7 +141,7 @@ GOL.prototype.step = function() {
                             gl.TEXTURE_2D, this.textures.back, 0);
     gl.bindTexture(gl.TEXTURE_2D, this.textures.front);
     gl.viewport(0, 0, this.statesize[0], this.statesize[1]);
-    this.programs.gol.use()
+    this.programs.gol[this.conf].use()
         .attrib('quad', this.buffers.quad, 2)
         .uniform('state', 0, true)
         .uniform('scale', this.statesize)
@@ -193,12 +196,9 @@ GOL.prototype.start = function() {
         gol.step();
         gol.draw();
         var elapsed = performance.now()-this.start_time;
-        var dfps = parseInt($("#fps_opt")[0].value);
-        this.sleep_time += 1000/dfps-elapsed;
+        this.sleep_time += this.ftime-elapsed;
         if (this.sleep_time < 0)
             this.sleep_time = 0;
-        while(elapsed < 1000/dfps)
-            elapsed = performance.now()-this.start_time;
         if (!this.stopped) {
             this.start_time = performance.now();
             setTimeout(frame.bind(this), this.sleep_time);
@@ -271,8 +271,17 @@ var gol = null, controller = null;
 $(document).ready(function() {
     var $canvas = $('#life');
     gol = new GOL($canvas[0]);
+    gol.conf = 0;
+    gol.ftime = 1000/60;
     gol.draw().start();
     controller = new Controller(gol);
+    $("#conf_opt").change(function(){
+        gol.conf = parseInt($("#conf_opt option:selected")[0].value)
+    })
+    $("#fps_opt").on("input", function(){
+        var dfps = parseInt($("#fps_opt")[0].value);
+        gol.ftime = 1000/dfps;
+    })
 });
 
 /* Don't scroll on spacebar. */

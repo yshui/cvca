@@ -1,4 +1,4 @@
-function gen_shader() {
+function gen_shader(conf) {
 var shader = "\
 precision mediump float;\n\
 uniform sampler2D state;\n\
@@ -54,11 +54,11 @@ for(var k in sortnet) {
 }
 
 var coff = new Array(24);
-/* Conf 1:
+if (conf == 0) {
 coff[2] = -0.205;
 coff[12] = 1.275;
 coff[23] = -0.09;
-*/
+}else {
 coff[9] = 0.25;
 coff[8] = 1.3;
 coff[7] = 1.1;
@@ -66,6 +66,7 @@ coff[22] = 0.16;
 coff[20] = -0.05;
 coff[4] = -0.9;
 coff[5]=-0.9;
+}
 
 shader += "float res = 0.0";
 for(var k = 0; k < 24; k++) {
