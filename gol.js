@@ -188,12 +188,25 @@ GOL.prototype.get = function() {
  * @returns {GOL} this
  */
 GOL.prototype.start = function() {
-    if (this.timer == null) {
-        this.timer = setInterval(function(){
-            gol.step();
-            gol.draw();
-        }, 60);
+    this.stopped = false;
+    function frame(){
+        gol.step();
+        gol.draw();
+        var elapsed = performance.now()-this.start_time;
+        var dfps = parseInt($("#fps_opt")[0].value);
+        this.sleep_time += 1000/dfps-elapsed;
+        if (this.sleep_time < 0)
+            this.sleep_time = 0;
+        while(elapsed < 1000/dfps)
+            elapsed = performance.now()-this.start_time;
+        if (!this.stopped) {
+            this.start_time = performance.now();
+            setTimeout(frame.bind(this), this.sleep_time);
+        }
     }
+    this.start_time = performance.now();
+    this.sleep_time = 0;
+    frame.call(this);
     return this;
 };
 
@@ -202,8 +215,7 @@ GOL.prototype.start = function() {
  * @returns {GOL} this
  */
 GOL.prototype.stop = function() {
-    clearInterval(this.timer);
-    this.timer = null;
+    this.stopped = true;
     return this;
 };
 
@@ -212,11 +224,9 @@ GOL.prototype.stop = function() {
  * @returns {GOL} this
  */
 GOL.prototype.toggle = function() {
-    if (this.timer == null) {
+    this.stopped = !this.stopped;
+    if (!this.stopped)
         this.start();
-    } else {
-        this.stop();
-    }
 };
 
 /**
@@ -260,7 +270,8 @@ function Controller(gol) {
 var gol = null, controller = null;
 $(document).ready(function() {
     var $canvas = $('#life');
-    gol = new GOL($canvas[0]).draw().start();
+    gol = new GOL($canvas[0]);
+    gol.draw().start();
     controller = new Controller(gol);
 });
 

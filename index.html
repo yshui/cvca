@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>WebGL Game of Life</title>
+    <title>Continuous Valued Cellular Automaton</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <link rel="stylesheet" href="gol.css"/>
     <script src="igloo.js"></script>
@@ -10,11 +10,12 @@
     <script src="gol.js"></script>
   </head>
   <body>
-    <h1>Continuous Valued Cellular Automaton</h1>
+  <div id="fps_con">
+  <div class="fps">-- FPS</div>/
+  <input type="text" id="fps_opt" value="60"></input>
+  </div>
     <!-- Canvas dimensions must be powers of two. -->
     <canvas id="life" width="1024" height="512"></canvas>
-    <div class="fps">
-    </div>
     <div class="options">
     <input type="checkbox" id="invert">Invert Color</input>
     </div>

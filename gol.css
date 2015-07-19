@@ -45,12 +45,22 @@ canvas {
     text-align: justify;
 }
 
+#fps_con {
+    width : 100px;
+    margin: auto;
+    color: #4f4f4f;
+    font-size: 20px;
+}
 .fps {
-    position: absolute;
-    top: 0;
-    right: 0;
-    color: #444;
-    font-size: 12px;
+    display: inline-block;
+}
+
+#fps_opt {
+   width: 20px;
+   margin : auto;
+   top : -5px;
+   text-align : right;
+   font-weight : bold;
 }
 
 ul li span {
